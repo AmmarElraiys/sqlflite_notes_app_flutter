@@ -1,18 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notes_app/middleware/auth_middleware.dart';
 import 'package:notes_app/screens/auth/login_screen.dart';
-// import 'package:notes_app/screens/home_screen.dart';
+import 'package:notes_app/screens/auth/passpword_screen.dart';
+import 'package:notes_app/screens/auth/signup_screen.dart';
+import 'package:notes_app/screens/home_screen.dart';
+import 'package:notes_app/services/sttings_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+SharedPreferences? sharedPreferences;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  intialService();
   runApp(const MyApp());
+}
+
+Future intialService() async {
+  await Get.putAsync(() => SttingsServices().init());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(title: 'Flutter Demo', home: LoginScreen());
+    return GetMaterialApp(
+      title: 'Flutter Demo',
+      home: LoginScreen(),
+      getPages: [
+        GetPage(
+          name: "/",
+          page: () => LoginScreen(),
+          middlewares: [AuthMiddleware()],
+        ),
+        GetPage(name: "/signup", page: () => SignUpScreen()),
+        GetPage(name: "/home", page: () => HomeScreen()),
+        GetPage(name: "/password", page: () => ChangePasswordScreen()),
+      ],
+    );
   }
 }
