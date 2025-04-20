@@ -4,6 +4,8 @@ import 'package:notes_app/middleware/auth_middleware.dart';
 import 'package:notes_app/screens/auth/login_screen.dart';
 import 'package:notes_app/screens/auth/passpword_screen.dart';
 import 'package:notes_app/screens/auth/signup_screen.dart';
+import 'package:notes_app/screens/home/add_notes_screen.dart';
+import 'package:notes_app/screens/home/notes_screen.dart';
 import 'package:notes_app/screens/home_screen.dart';
 import 'package:notes_app/services/sttings_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-      home: HomeScreen(),
+      home: NotesScreen(),
       getPages: [
         GetPage(
           name: "/",
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/signup", page: () => SignUpScreen()),
         GetPage(name: "/home", page: () => HomeScreen()),
         GetPage(name: "/password", page: () => ChangePasswordScreen()),
+        GetPage(name: "/notes", page: () => NotesScreen()),
+        GetPage(name: "/addnotes", page: () => AddNoteScreen()),
       ],
     );
   }
