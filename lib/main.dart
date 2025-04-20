@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-      home: LoginScreen(),
+      home: HomeScreen(),
       getPages: [
         GetPage(
           name: "/",

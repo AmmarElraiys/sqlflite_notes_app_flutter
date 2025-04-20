@@ -6,7 +6,7 @@ class AuthMiddleware extends GetMiddleware {
   @override
   int? get priority => 1;
 
-  final SttingsServices controller = Get.find();
+  SttingsServices controller = Get.put(SttingsServices());
 
   @override
   RouteSettings? redirect(String? route) {
