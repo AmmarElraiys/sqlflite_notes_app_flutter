@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:notes_app/screens/home/group_add_notes_screen.dart';
 import 'package:notes_app/widgets/drawer_home.dart';
 import 'package:notes_app/widgets/home/floatingactionbutton_widget.dart';
 
@@ -18,12 +20,18 @@ class _HomeScreenState extends State<HomeScreen> {
     {"title": "Note Five", "img": "assets/images/folder.png"},
   ];
 
+  get currentUserId => null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Home Screen")),
       drawer: const DrawerHome(),
-      floatingActionButton: FloatingActionButtonWidget(onPressed: () {}),
+      floatingActionButton: FloatingActionButtonWidget(
+        onPressed: () {
+          Get.to(() => GroupAddNotesScreen(userId: currentUserId));
+        },
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: GridView.builder(

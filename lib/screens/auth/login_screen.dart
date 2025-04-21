@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:notes_app/controller/auth/login_controller.dart';
 import 'package:notes_app/screens/auth/passpword_screen.dart';
 import 'package:notes_app/screens/auth/signup_screen.dart';
+import 'package:notes_app/screens/home_screen.dart';
+import 'package:notes_app/services/sttings_services.dart';
 import 'package:notes_app/utils/auth/email_validator.dart';
 import 'package:notes_app/utils/auth/password_validator.dart';
 import 'package:notes_app/widgets/auth/textformfield_widget.dart';
@@ -53,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     label: "Password",
                     icon: Icons.lock,
                     controller: loginController.password,
-                    obscureText: true,
+                    obscureText: false,
                     validator: (value) => PasswordValidator.validate(value),
                   ),
                   Padding(
@@ -81,10 +83,41 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState!.validate()) {
-                        loginController.login();
-                        // Burada ana sayfaya yönlendirme yapılabilir
+                        bool isLoggedIn = await loginController.login();
+                        if (isLoggedIn) {
+                          // Navigate to the Home Screen after successful login
+                          Get.offAll(
+                            HomeScreen(),
+                          ); // Navigate to the main screen
+                        } else {
+                          // If login fails, show a snackbar with an error message
+                          Get.snackbar(
+                            "Login Failed",
+                            "Incorrect email or password",
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                        }
+                        Get.find<SttingsServices>().sharedPreferences.setString(
+                          "roul",
+                          "0",
+                        );
+                      }
+                      if (formKey.currentState!.validate()) {
+                        bool isLoggedIn = await loginController.login();
+                        if (isLoggedIn) {
+                          await Get.find<SttingsServices>().sharedPreferences
+                              .setString("roul", "0");
+
+                          Get.offAll(HomeScreen());
+                        } else {
+                          Get.snackbar(
+                            "Login Failed",
+                            "Incorrect email or password",
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(

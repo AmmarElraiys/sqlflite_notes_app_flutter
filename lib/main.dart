@@ -5,6 +5,7 @@ import 'package:notes_app/screens/auth/login_screen.dart';
 import 'package:notes_app/screens/auth/passpword_screen.dart';
 import 'package:notes_app/screens/auth/signup_screen.dart';
 import 'package:notes_app/screens/home/add_notes_screen.dart';
+import 'package:notes_app/screens/home/group_add_notes_screen.dart';
 import 'package:notes_app/screens/home/notes_screen.dart';
 import 'package:notes_app/screens/home_screen.dart';
 import 'package:notes_app/services/sttings_services.dart';
@@ -13,12 +14,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 SharedPreferences? sharedPreferences;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  intialService();
-  runApp(const MyApp());
-}
 
-Future intialService() async {
+  // init fonksiyonu asenkron olduğu için Get.putAsync ile çağır
   await Get.putAsync(() => SttingsServices().init());
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-      home: NotesScreen(),
+      initialRoute: "/",
       getPages: [
         GetPage(
           name: "/",
@@ -39,6 +39,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/password", page: () => ChangePasswordScreen()),
         GetPage(name: "/notes", page: () => NotesScreen()),
         GetPage(name: "/addnotes", page: () => AddNoteScreen()),
+        GetPage(
+          name: "/notesgroup",
+          page: () => GroupAddNotesScreen(userId: 1),
+        ),
       ],
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes_app/controller/auth/signup_controller.dart';
 import 'package:notes_app/utils/auth/password_validator.dart';
+import 'package:notes_app/widgets/auth/textformfield_widget.dart';
 
 class SignUpScreen extends StatelessWidget {
   final SignUpController signUpController = Get.put(SignUpController());
@@ -32,15 +33,11 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30),
-                TextFormField(
+                // Using TextFormFieldWidget for each field
+                TextFormFieldWidget(
+                  label: "Username",
+                  icon: Icons.person,
                   controller: signUpController.username,
-                  decoration: InputDecoration(
-                    labelText: "Username",
-                    prefixIcon: const Icon(Icons.person),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter your username";
@@ -48,75 +45,71 @@ class SignUpScreen extends StatelessWidget {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
-                TextFormField(
+                TextFormFieldWidget(
+                  label: "Email",
+                  icon: Icons.email,
                   controller: signUpController.email,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: "Email",
-                    prefixIcon: Icon(Icons.email),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter your email";
                     }
+                    if (!RegExp(
+                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
+                    ).hasMatch(value)) {
+                      return 'Please enter a valid email';
+                    }
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
-                TextFormField(
+                TextFormFieldWidget(
+                  label: "Phone Number",
+                  icon: Icons.phone,
                   controller: signUpController.phone,
                   keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    labelText: "Phone Number",
-                    prefixIcon: Icon(Icons.phone),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter your phone number";
                     }
+                    if (value.length != 10) {
+                      return 'Please enter a valid phone number';
+                    }
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
-                TextFormField(
+                TextFormFieldWidget(
+                  label: "Password",
+                  icon: Icons.lock,
                   controller: signUpController.password,
                   obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Password",
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                   validator: (value) => PasswordValidator.validate(value),
                 ),
                 const SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      signUpController.signUp();
-                      // Burada API ile veri gönderme veya yönlendirme işlemi yapılabilir
-                      Get.snackbar("Sign Up", "Your account has been created.");
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text("Sign Up"),
-                ),
+                Obx(() {
+                  return signUpController.isLoading.value
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            signUpController.signUp();
+                            Get.snackbar(
+                              "Sign Up",
+                              "Your account has been created.",
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 40,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text("Sign Up"),
+                      );
+                }),
               ],
             ),
           ),
