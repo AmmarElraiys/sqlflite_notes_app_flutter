@@ -6,16 +6,15 @@ class AuthMiddleware extends GetMiddleware {
   @override
   int? get priority => 1;
 
-  final SttingsServices controller = Get.find();
-
   @override
   RouteSettings? redirect(String? route) {
-    final roul = controller.sharedPreferences.getString("roul");
+    final settingsServices = Get.find<SettingsServices>();
+    final role = settingsServices.sharedPreferences.getString("role");
 
-    if (roul == "0") {
+    if (role != null) {
       return const RouteSettings(name: "/home");
     }
 
-    return null;
+    return null; // giriş yapmamışsa devam etsin
   }
 }

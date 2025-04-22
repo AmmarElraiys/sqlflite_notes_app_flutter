@@ -7,6 +7,8 @@ import 'package:notes_app/screens/home_screen.dart';
 import 'package:notes_app/services/sttings_services.dart';
 import 'package:notes_app/utils/auth/email_validator.dart';
 import 'package:notes_app/utils/auth/password_validator.dart';
+import 'package:notes_app/widgets/auth/button_login_signup_widget.dart';
+import 'package:notes_app/widgets/auth/textbutton_login_signup_widget.dart';
 import 'package:notes_app/widgets/auth/textformfield_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -55,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     label: "Password",
                     icon: Icons.lock,
                     controller: loginController.password,
-                    obscureText: false,
+                    initialObscureText: true,
                     validator: (value) => PasswordValidator.validate(value),
                   ),
                   Padding(
@@ -82,34 +84,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
+                  ButtonLoginSignupWidget(
+                    text: "Login",
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         bool isLoggedIn = await loginController.login();
                         if (isLoggedIn) {
-                          // Navigate to the Home Screen after successful login
-                          Get.offAll(
-                            HomeScreen(),
-                          ); // Navigate to the main screen
-                        } else {
-                          // If login fails, show a snackbar with an error message
-                          Get.snackbar(
-                            "Login Failed",
-                            "Incorrect email or password",
-                            snackPosition: SnackPosition.BOTTOM,
-                          );
-                        }
-                        Get.find<SttingsServices>().sharedPreferences.setString(
-                          "roul",
-                          "0",
-                        );
-                      }
-                      if (formKey.currentState!.validate()) {
-                        bool isLoggedIn = await loginController.login();
-                        if (isLoggedIn) {
-                          await Get.find<SttingsServices>().sharedPreferences
-                              .setString("roul", "0");
-
+                          await Get.find<SettingsServices>().sharedPreferences
+                              .setString(
+                                "role",
+                                "0",
+                              ); // Not: 'roul' yerine 'role' kullandım.
                           Get.offAll(HomeScreen());
                         } else {
                           Get.snackbar(
@@ -120,35 +105,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       }
                     },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 40,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text("Login"),
                   ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("Don't have an account? "),
-                      GestureDetector(
-                        onTap: () {
-                          // Sign Up sayfasına yönlendirme
-                          Get.off(
-                            SignUpScreen(),
-                          ); // SignUpScreen() yerine kendi ekranınızı kullanabilirsiniz
+                      TextbuttonLoginSignupWidget(
+                        title: "Sign up",
+                        onPressed: () {
+                          Get.off(SignUpScreen());
                         },
-                        child: Text(
-                          "Sign Up",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
-                        ),
                       ),
                     ],
                   ),

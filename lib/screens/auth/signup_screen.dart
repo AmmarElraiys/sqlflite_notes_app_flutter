@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes_app/controller/auth/signup_controller.dart';
+import 'package:notes_app/utils/auth/email_validator.dart';
 import 'package:notes_app/utils/auth/password_validator.dart';
+import 'package:notes_app/widgets/auth/button_login_signup_widget.dart';
 import 'package:notes_app/widgets/auth/textformfield_widget.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
+  SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   final SignUpController signUpController = Get.put(SignUpController());
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -37,6 +47,7 @@ class SignUpScreen extends StatelessWidget {
                 TextFormFieldWidget(
                   label: "Username",
                   icon: Icons.person,
+                  initialObscureText: false,
                   controller: signUpController.username,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -47,23 +58,16 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 TextFormFieldWidget(
                   label: "Email",
+                  initialObscureText: false,
                   icon: Icons.email,
                   controller: signUpController.email,
                   keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your email";
-                    }
-                    if (!RegExp(
-                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
-                    ).hasMatch(value)) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
+                  validator: (value) => EmailValidator.validate(value),
                 ),
+
                 TextFormFieldWidget(
                   label: "Phone Number",
+                  initialObscureText: false,
                   icon: Icons.phone,
                   controller: signUpController.phone,
                   keyboardType: TextInputType.phone,
@@ -81,14 +85,15 @@ class SignUpScreen extends StatelessWidget {
                   label: "Password",
                   icon: Icons.lock,
                   controller: signUpController.password,
-                  obscureText: true,
+                  initialObscureText: true,
                   validator: (value) => PasswordValidator.validate(value),
                 ),
                 const SizedBox(height: 30),
                 Obx(() {
                   return signUpController.isLoading.value
                       ? const CircularProgressIndicator()
-                      : ElevatedButton(
+                      : ButtonLoginSignupWidget(
+                        text: "Sign Up",
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
                             signUpController.signUp();
@@ -98,16 +103,6 @@ class SignUpScreen extends StatelessWidget {
                             );
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 40,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text("Sign Up"),
                       );
                 }),
               ],

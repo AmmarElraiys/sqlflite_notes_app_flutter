@@ -54,7 +54,8 @@ class LoginController extends GetxController {
         return false; // Giriş başarısız
       }
     } catch (e) {
-      Get.snackbar("Hata", "Bir hata oluştu: $e");
+      // Get.snackbar("Hata", "Bir hata oluştu: $e");
+      print(e);
       isLoading.value = false;
       return false; // Hata durumunda da false döndür
     }

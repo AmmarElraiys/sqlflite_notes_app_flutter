@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes_app/utils/auth/conform_passpword_validator.dart';
 import 'package:notes_app/utils/auth/password_validator.dart';
+import 'package:notes_app/widgets/auth/button_login_signup_widget.dart';
+import 'package:notes_app/widgets/auth/textbutton_login_signup_widget.dart';
+import 'package:notes_app/widgets/auth/textformfield_widget.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -39,95 +42,53 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 const SizedBox(height: 30),
 
                 // Current Password Field
-                TextFormField(
+                TextFormFieldWidget(
+                  label: "Current Password",
+                  icon: Icons.lock,
                   controller: _currentPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Current Password",
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your current password";
-                    }
-                    return null;
-                  },
+                  initialObscureText: true,
+                  validator: (value) => PasswordValidator.validate(value),
                 ),
                 const SizedBox(height: 20),
 
                 // New Password Field
-                TextFormField(
+                TextFormFieldWidget(
+                  label: "New Password",
+                  icon: Icons.lock,
                   controller: _newPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "New Password",
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                  initialObscureText: true,
                   validator: (value) => PasswordValidator.validate(value),
                 ),
                 const SizedBox(height: 20),
 
                 // Confirm New Password Field
-                TextFormField(
+                TextFormFieldWidget(
+                  label: "Confirm New Password",
+                  icon: Icons.lock,
                   controller: _confirmPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Confirm New Password",
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                  initialObscureText: true,
                   validator:
                       (value) => ConfirmPasswordValidator.validate(
                         value,
                         _newPasswordController.text,
                       ),
                 ),
-
                 const SizedBox(height: 30),
 
                 // Submit Button
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Perform password change logic here
-                      // Example: changePassword(_currentPasswordController.text, _newPasswordController.text);
-                      Get.snackbar(
-                        "Password Changed",
-                        "Your password has been successfully updated.",
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text("Change Password"),
+                ButtonLoginSignupWidget(
+                  text: "ChangePassword",
+                  onPressed: () {},
                 ),
+
                 const SizedBox(height: 20),
-                TextButton(
+
+                // Back Button
+                TextbuttonLoginSignupWidget(
+                  title: "Back to Profile",
                   onPressed: () {
-                    Get.back(); // Go back to the previous screen
+                    Get.back();
                   },
-                  child: const Text(
-                    "Back to Profile",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
                 ),
               ],
             ),

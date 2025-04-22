@@ -43,7 +43,7 @@ class NoteAppDatabase {
     await db.execute(''' 
       CREATE TABLE notes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        groupid INTEGER,
+           INTEGER,
         title TEXT,
         contents TEXT,
         date TEXT,
@@ -55,7 +55,9 @@ class NoteAppDatabase {
   // Insert User
   Future<int> insertUser(Map<String, dynamic> user) async {
     final dbClient = await db;
-    return await dbClient.insert('users', user);
+    int resqopnse = await dbClient.insert('users', user);
+    print(resqopnse);
+    return resqopnse;
   }
 
   // Insert Notes Group
@@ -74,6 +76,11 @@ class NoteAppDatabase {
   Future<List<Map<String, dynamic>>> getUsers() async {
     final dbClient = await db;
     return await dbClient.query('users');
+  }
+
+  Future<List<Map<String, dynamic>>> getGroup() async {
+    final dbClient = await db;
+    return await dbClient.query('notesgroup');
   }
 
   // Read Notes Groups

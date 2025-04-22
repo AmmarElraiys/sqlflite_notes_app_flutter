@@ -53,13 +53,10 @@ class SignUpController extends GetxController {
       'password': passwordText,
     };
 
-    // Insert user into database
     try {
-      // Directly call the database instance without using .instance
-      await NoteAppDatabase().insertUser(
-        user,
-      ); // Use the constructor instead of instance
+      await NoteAppDatabase().insertUser(user);
       Get.snackbar("Başarılı", "Kayıt başarılı!");
+      Get.offAllNamed("/");
     } catch (e) {
       Get.snackbar("Hata", "Bir hata oluştu: $e");
     }

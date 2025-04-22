@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:notes_app/data/home/note_data.dart';
 
 class GroupAddNotesController {
@@ -9,15 +10,20 @@ class GroupAddNotesController {
     String groupName = groupNameController.text.trim();
 
     if (groupName.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Grup adı boş olamaz")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Group name cannot be empty")),
+      );
       return;
     }
 
-    await db.insert("notesgroup", {"userid": userId, "groupname": groupName});
+    int insertgroup = await db.insert("notesgroup", {
+      "userid": userId,
+      "groupname": groupName,
+    });
+    print(insertgroup);
 
-    Navigator.pop(context); // Ekleme sonrası geri dön
+    Get.offNamed("/home");
+    Get.reset();
   }
 
   void dispose() {

@@ -18,7 +18,7 @@ class AddNoteScreen extends StatelessWidget {
             TextField(
               controller: controller.titleController,
               decoration: const InputDecoration(
-                labelText: "title",
+                labelText: "Title",
                 border: OutlineInputBorder(),
               ),
             ),
@@ -36,7 +36,7 @@ class AddNoteScreen extends StatelessWidget {
               return controller.isLoading.value
                   ? const CircularProgressIndicator()
                   : ElevatedButton.icon(
-                    onPressed: controller.saveNote,
+                    onPressed: () => controller.saveNote(),
                     icon: const Icon(Icons.save),
                     label: const Text("Save"),
                   );

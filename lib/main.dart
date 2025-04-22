@@ -14,11 +14,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 SharedPreferences? sharedPreferences;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // init fonksiyonu asenkron olduğu için Get.putAsync ile çağır
-  await Get.putAsync(() => SttingsServices().init());
-
+  await initalService();
   runApp(MyApp());
+}
+
+Future initalService() async {
+  await Get.putAsync(() => SettingsServices().init());
 }
 
 class MyApp extends StatelessWidget {
@@ -26,6 +27,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+
       title: 'Flutter Demo',
       initialRoute: "/",
       getPages: [
@@ -39,10 +42,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/password", page: () => ChangePasswordScreen()),
         GetPage(name: "/notes", page: () => NotesScreen()),
         GetPage(name: "/addnotes", page: () => AddNoteScreen()),
-        GetPage(
-          name: "/notesgroup",
-          page: () => GroupAddNotesScreen(userId: 1),
-        ),
+        GetPage(name: "/notesgroup", page: () => GroupAddNotesScreen()),
       ],
     );
   }
