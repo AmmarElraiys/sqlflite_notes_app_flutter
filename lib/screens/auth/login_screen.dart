@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextbuttonLoginSignupWidget(
                         title: "Sign up",
                         onPressed: () {
-                          Get.off(SignUpScreen());
+                          Get.offAll(SignUpScreen());
                         },
                       ),
                     ],

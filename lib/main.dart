@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 SharedPreferences? sharedPreferences;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  sharedPreferences = await SharedPreferences.getInstance();
   await initalService();
   runApp(MyApp());
 }

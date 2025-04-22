@@ -1,30 +1,86 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:notes_app/controller/home/home_controller.dart';
 
-import 'package:notes_app/main.dart';
+class DeleteGroupDialog extends StatefulWidget {
+  final Map<String, dynamic> group;
+  final HomeController controller;
 
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  const DeleteGroupDialog({
+    Key? key,
+    required this.group,
+    required this.controller,
+  }) : super(key: key);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  @override
+  State<DeleteGroupDialog> createState() => _DeleteGroupDialogState();
+}
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+class _DeleteGroupDialogState extends State<DeleteGroupDialog> {
+  bool isDeleting = false;
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Row(
+        children: const [
+          Icon(Icons.warning_amber_rounded, color: Colors.red),
+          SizedBox(width: 8),
+          Text("Delete Group"),
+        ],
+      ),
+      content: Text(
+        'Are you sure you want to delete the group "${widget.group['groupname']}"?',
+        style: const TextStyle(fontSize: 16),
+      ),
+      actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      actions:
+          isDeleting
+              ? [
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ]
+              : [
+                TextButton(
+                  onPressed: () {
+                    Get.back(); // Cancelled
+                  },
+                  child: const Text("Cancel"),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    setState(() {
+                      isDeleting = true;
+                    });
+
+                    await widget.controller.deleteGroup(widget.group['id']);
+
+                    if (mounted) {
+                      Get.back(); // Close dialog
+                      Get.snackbar(
+                        "Group Deleted",
+                        '"${widget.group['groupname']}" has been deleted successfully.',
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red.shade100,
+                        colorText: Colors.black87,
+                        margin: const EdgeInsets.all(12),
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.delete),
+                  label: const Text("Delete"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                  ),
+                ),
+              ],
+    );
+  }
 }

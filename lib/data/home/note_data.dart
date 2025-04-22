@@ -41,15 +41,15 @@ class NoteAppDatabase {
 
     // NOTES TABLE
     await db.execute(''' 
-      CREATE TABLE notes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-           INTEGER,
-        title TEXT,
-        contents TEXT,
-        date TEXT,
-        FOREIGN KEY (groupid) REFERENCES notesgroup(id)
-      )
-    ''');
+  CREATE TABLE notes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    contents TEXT,
+    date TEXT,
+    groupid INTEGER,
+    FOREIGN KEY (groupid) REFERENCES notesgroup(id)
+  )
+''');
   }
 
   // Insert User

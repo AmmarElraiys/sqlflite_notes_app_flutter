@@ -6,11 +6,9 @@ class DeleteGroupDialog extends StatelessWidget {
   final Map<String, dynamic> group;
   final HomeController controller;
 
-  const DeleteGroupDialog({
-    Key? key,
-    required this.group,
-    required this.controller,
-  }) : super(key: key);
+  DeleteGroupDialog({Key? key, required this.group})
+    : controller = Get.find<HomeController>(),
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,7 @@ class DeleteGroupDialog extends StatelessWidget {
           onPressed: () {
             Get.back(); // Close the dialog
           },
-          child: const Text("NO"),
+          child: const Text("No"),
         ),
       ],
     );

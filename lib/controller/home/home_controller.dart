@@ -15,14 +15,8 @@ class HomeController extends GetxController {
   Future<void> deleteGroup(int groupId) async {
     try {
       final db = await NoteAppDatabase().db;
-
-      // Delete group from database
       await db.delete("notesgroup", where: "id = ?", whereArgs: [groupId]);
-
-      // Remove the group from the controller's list
       groups.removeWhere((group) => group['id'] == groupId);
-
-      // Optionally show a snackbar confirmation
       Get.snackbar("Başarılı", "Grup başarıyla silindi.");
     } catch (e) {
       Get.snackbar("Hata", "Grup silinirken bir hata oluştu.");

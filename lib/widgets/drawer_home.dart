@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notes_app/controller/auth/login_controller.dart';
 import 'package:notes_app/data/home/note_data.dart';
+import 'package:notes_app/main.dart';
 import 'package:notes_app/screens/auth/login_screen.dart';
-import 'package:notes_app/services/sttings_services.dart';
 
 class DrawerHome extends StatelessWidget {
-  const DrawerHome({super.key});
+  DrawerHome({super.key});
 
   Future<List<Map<String, dynamic>>> _getUserData() async {
     return await NoteAppDatabase().getUsers();
   }
 
+  final controller = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -79,7 +81,9 @@ class DrawerHome extends StatelessWidget {
                       textCancel: "No",
                       confirmTextColor: Colors.white,
                       onConfirm: () {
-                        Get.find<SettingsServices>().logout();
+                        // Get.find<SettingsServices>().logout();
+                        sharedPreferences!.clear();
+                        controller.logout();
                         Get.offAll(() => LoginScreen());
                       },
                     );

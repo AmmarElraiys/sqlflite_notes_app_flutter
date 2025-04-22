@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes_app/data/home/note_data.dart';
+import 'package:notes_app/services/sttings_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
@@ -8,18 +9,12 @@ class LoginController extends GetxController {
   late TextEditingController password;
   RxBool isLoading = false.obs;
   SharedPreferences? sharedPreferences;
+  final SettingsServices settings = Get.put(SettingsServices());
   @override
   void onInit() {
     email = TextEditingController();
     password = TextEditingController();
     super.onInit();
-  }
-
-  @override
-  void onClose() {
-    email.dispose();
-    password.dispose();
-    super.onClose();
   }
 
   Future<bool> login() async {
@@ -44,7 +39,6 @@ class LoginController extends GetxController {
       );
 
       if (result.isNotEmpty) {
-        int userId = result.first['id'];
         Get.snackbar("Giriş Başarılı", "Hoş geldiniz!");
         isLoading.value = false;
         return true; // Giriş başarılı
@@ -59,5 +53,17 @@ class LoginController extends GetxController {
       isLoading.value = false;
       return false; // Hata durumunda da false döndür
     }
+  }
+
+  void logout() {
+    settings.logout(); // bu artık sharedPreferences.clear() çağırır
+    Get.offAllNamed("/login"); // örnek olarak kullanıcıyı login ekranına gönder
+  }
+
+  @override
+  void onClose() {
+    email.dispose();
+    password.dispose();
+    super.onClose();
   }
 }
